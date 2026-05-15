@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
+import QrScanner from 'qr-scanner'
 import './App.css'
 
 type Phase = 'ENTRY' | 'DRIVING' | 'WALKING' | 'FOUND'
@@ -47,7 +48,36 @@ export default function App() {
   const [compassGranted, setCompassGranted] = useState(false)
   const [foundAt, setFoundAt] = useState<string | null>(null)
 
+  const [scanning, setScanning] = useState(false)
+  const videoRef = useRef<HTMLVideoElement>(null)
+  const scannerRef = useRef<QrScanner | null>(null)
   const watchIdRef = useRef<number | null>(null)
+
+  // QR scanner — active when scanning=true
+  useEffect(() => {
+    if (!scanning || !videoRef.current) return
+    const scanner = new QrScanner(
+      videoRef.current,
+      (result) => {
+        try {
+          const url = new URL(result.data)
+          const lat = parseFloat(url.searchParams.get('lat') ?? '')
+          const lon = parseFloat(url.searchParams.get('lon') ?? '')
+          if (!isNaN(lat) && !isNaN(lon)) {
+            scanner.stop()
+            setRocketLat(lat)
+            setRocketLon(lon)
+            setScanning(false)
+            setPhase('DRIVING')
+          }
+        } catch { /* not a valid URL */ }
+      },
+      { returnDetailedScanResult: true, preferredCamera: 'environment' }
+    )
+    scanner.start()
+    scannerRef.current = scanner
+    return () => { scanner.stop(); scanner.destroy() }
+  }, [scanning])
 
   // GPS watch — active only during WALKING
   useEffect(() => {
@@ -188,9 +218,27 @@ export default function App() {
       )
     }
 
+    if (scanning) {
+      return (
+        <div className="screen">
+          <h1 className="title white">SCAN QR CODE</h1>
+          <div className="scanner-wrap">
+            <video ref={videoRef} className="scanner-video" />
+          </div>
+          <button className="btn btn-secondary" onClick={() => setScanning(false)}>
+            CANCEL
+          </button>
+        </div>
+      )
+    }
+
     return (
       <div className="screen">
         <h1 className="title white">ENTER ROCKET COORDINATES</h1>
+        <button className="btn btn-primary" onClick={() => setScanning(true)}>
+          📷 SCAN QR CODE
+        </button>
+        <p className="tip">— or enter manually —</p>
         <div className="form-group">
           <label className="form-label">LAT</label>
           <input
@@ -212,7 +260,7 @@ export default function App() {
           />
         </div>
         {manualError && <p className="error-text">{manualError}</p>}
-        <button className="btn btn-primary" onClick={confirmManual}>
+        <button className="btn btn-secondary" onClick={confirmManual}>
           CONFIRM
         </button>
       </div>
