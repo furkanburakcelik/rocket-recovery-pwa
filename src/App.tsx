@@ -1,6 +1,8 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, lazy, Suspense } from 'react'
 import QrScanner from 'qr-scanner'
 import './App.css'
+
+const RecoveryMap = lazy(() => import('./RecoveryMap'))
 
 type Phase = 'ENTRY' | 'DRIVING' | 'WALKING' | 'FOUND'
 
@@ -324,6 +326,17 @@ export default function App() {
           <button className="btn btn-secondary" onClick={requestCompass}>
             ENABLE COMPASS
           </button>
+        )}
+
+        {userLat !== null && userLon !== null && (
+          <Suspense fallback={null}>
+            <RecoveryMap
+              userLat={userLat}
+              userLon={userLon}
+              rocketLat={rocketLat!}
+              rocketLon={rocketLon!}
+            />
+          </Suspense>
         )}
       </div>
     )
