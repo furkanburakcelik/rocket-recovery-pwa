@@ -280,7 +280,7 @@ export default function App() {
         <a className="btn btn-primary" href={mapsUrl} target="_blank" rel="noreferrer">
           OPEN IN GOOGLE MAPS →
         </a>
-        <a className="btn btn-secondary" href={`osmand.navigation:q=${rocketLat},${rocketLon}`}>
+        <a className="btn btn-secondary" href={`https://osmand.net/go?lat=${rocketLat}&lon=${rocketLon}&z=15`} target="_blank" rel="noreferrer">
           OPEN IN OSMAND (OFFLINE) →
         </a>
         <p className="tip">Tip: Pre-download offline map before departure</p>
