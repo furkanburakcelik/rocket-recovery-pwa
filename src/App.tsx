@@ -280,7 +280,10 @@ export default function App() {
         <a className="btn btn-primary" href={mapsUrl} target="_blank" rel="noreferrer">
           OPEN IN GOOGLE MAPS →
         </a>
-        <p className="tip">Tip: Pre-download offline map in Google Maps before departure</p>
+        <a className="btn btn-secondary" href={`osmand.navigation:q=${rocketLat},${rocketLon}`}>
+          OPEN IN OSMAND (OFFLINE) →
+        </a>
+        <p className="tip">Tip: Pre-download offline map before departure</p>
         <button className="btn btn-secondary" onClick={() => setPhase('WALKING')}>
           I'VE ARRIVED — START WALKING
         </button>
