@@ -1,0 +1,210 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: #000000;
+  color: #ffffff;
+  font-family: 'Courier New', monospace;
+  min-height: 100dvh;
+  overscroll-behavior: none;
+}
+
+#root {
+  min-height: 100dvh;
+  display: flex;
+  align-items: stretch;
+}
+
+.screen {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  padding: 32px 24px;
+  min-height: 100dvh;
+}
+
+/* ── Titles ── */
+.title {
+  font-size: clamp(22px, 6vw, 32px);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.title.green  { color: #00ff00; }
+.title.white  { color: #ffffff; }
+
+/* ── Buttons ── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 56px;
+  padding: 16px 32px;
+  font-family: 'Courier New', monospace;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  width: 100%;
+  max-width: 360px;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.btn-primary {
+  background: #00ff00;
+  color: #000000;
+}
+
+.btn-primary:active {
+  background: #00cc00;
+}
+
+.btn-secondary {
+  background: transparent;
+  color: #888888;
+  border: 1px solid #333333;
+}
+
+.btn-secondary:active {
+  border-color: #666666;
+  color: #ffffff;
+}
+
+/* ── Coordinates block (ENTRY with URL params) ── */
+.coords-block {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  max-width: 360px;
+}
+
+.coord-row {
+  display: flex;
+  gap: 12px;
+  align-items: baseline;
+}
+
+.coord-label {
+  color: #888888;
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  min-width: 44px;
+}
+
+.coord-value {
+  color: #ffffff;
+  font-family: 'Courier New', monospace;
+  font-size: 18px;
+}
+
+/* ── Coordinates small (DRIVING) ── */
+.coords-small {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  color: #888888;
+  font-size: 14px;
+}
+
+/* ── Manual form (ENTRY, no params) ── */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+  max-width: 360px;
+}
+
+.form-label {
+  color: #888888;
+  font-size: 12px;
+  letter-spacing: 0.1em;
+}
+
+.form-input {
+  background: #111111;
+  border: 1px solid #333333;
+  border-radius: 4px;
+  color: #ffffff;
+  font-family: 'Courier New', monospace;
+  font-size: 18px;
+  padding: 14px 16px;
+  outline: none;
+  width: 100%;
+}
+
+.form-input:focus {
+  border-color: #00ff00;
+}
+
+.error-text {
+  color: #ff4444;
+  font-size: 13px;
+  text-align: center;
+}
+
+/* ── Tip text ── */
+.tip {
+  color: #555555;
+  font-size: 13px;
+  text-align: center;
+  max-width: 320px;
+}
+
+/* ── WALKING ── */
+.dist-label {
+  font-size: clamp(40px, 12vw, 72px);
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: 0.04em;
+}
+
+.acquiring {
+  font-size: 18px;
+  color: #888888;
+}
+
+.arrow-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 160px;
+  height: 160px;
+}
+
+.arrow {
+  font-size: 120px;
+  line-height: 1;
+  color: #00ff00;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+}
+
+.accuracy {
+  font-size: 13px;
+}
+
+.accuracy.ok   { color: #888888; }
+.accuracy.warn { color: #ffaa00; }
+
+/* ── FOUND ── */
+.found-time {
+  color: #888888;
+  font-size: 14px;
+}
