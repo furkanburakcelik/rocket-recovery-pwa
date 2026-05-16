@@ -258,7 +258,7 @@ export default function App() {
           <label className="form-label">LAT</label>
           <input
             className="form-input"
-            inputMode="decimal"
+            inputMode="text"
             placeholder="e.g. 31.044840"
             value={manualLat}
             onChange={(e) => setManualLat(e.target.value)}
@@ -268,7 +268,7 @@ export default function App() {
           <label className="form-label">LON</label>
           <input
             className="form-input"
-            inputMode="decimal"
+            inputMode="text"
             placeholder="e.g. -103.536240"
             value={manualLon}
             onChange={(e) => setManualLon(e.target.value)}

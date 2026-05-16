@@ -4,14 +4,14 @@ const http  = require('http')
 const fs    = require('fs')
 const path  = require('path')
 
-const LAT       = 31.04486
-const LON       = -103.52794
-const RADIUS_KM = 5
-const MIN_ZOOM  = 13
-const MAX_ZOOM  = 16
+const LAT       = parseFloat(process.argv[2] || '31.04486')
+const LON       = parseFloat(process.argv[3] || '-103.52794')
+const RADIUS_KM = parseFloat(process.argv[4] || '5')
+const MIN_ZOOM  = parseInt  (process.argv[5] || '13')
+const MAX_ZOOM  = parseInt  (process.argv[6] || '16')
 
 const TILE_URL = (z, x, y) =>
-  `https://basemap.nationalmap.gov/arcgis/rest/services/USGSImageryOnly/MapServer/tile/${z}/${y}/${x}`
+  `https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/${z}/${y}/${x}`
 
 const OUT_DIR = path.join(__dirname, 'public', 'tiles')
 
@@ -57,16 +57,14 @@ function downloadTile({ z, x, y }) {
     const url = TILE_URL(z, x, y)
     const mod = url.startsWith('https') ? https : http
     const req = mod.get(url, {
-      headers: {
-        'User-Agent': 'RocketGroundStation/1.0',
-        'Referer': 'https://www.usgs.gov/'
-      }
+      headers: { 'User-Agent': 'RocketGroundStation/1.0' }
     }, (res) => {
-      if (res.statusCode !== 200) { done++; process.stdout.write(`\r[${done}/${tiles.length}]`); resolve(); return }
+      if (res.statusCode !== 200) { res.resume(); done++; process.stdout.write(`\r[${done}/${tiles.length}]`); resolve(); return }
       const ws = fs.createWriteStream(file)
       res.pipe(ws)
       ws.on('finish', () => { done++; process.stdout.write(`\r[${done}/${tiles.length}] (${skipped} cached)`); resolve() })
     })
+    req.setTimeout(10000, () => { req.destroy(); done++; resolve() })
     req.on('error', () => { done++; resolve() })
   })
 }
