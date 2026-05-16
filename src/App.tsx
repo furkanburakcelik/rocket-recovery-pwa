@@ -29,6 +29,19 @@ function formatDist(m: number): string {
   return m >= 1000 ? `${(m / 1000).toFixed(2)} km` : `${Math.round(m)} m`
 }
 
+function parseCoord(raw: string): number {
+  const s = raw.trim()
+  // DMS: 40°00'24.6"N or 32°52'11.6"E
+  const dms = s.match(/^(-?\d+)[°\s]\s*(\d+)['’\s]\s*([\d.]+)["”]?\s*([NSEWnsew])?/)
+  if (dms) {
+    const val = parseInt(dms[1]) + parseInt(dms[2]) / 60 + parseFloat(dms[3]) / 3600
+    const dir = dms[4]?.toUpperCase()
+    return (dir === 'S' || dir === 'W') ? -val : val
+  }
+  // Decimal with comma or dot
+  return parseFloat(s.replace(',', '.'))
+}
+
 export default function App() {
   const params = new URLSearchParams(window.location.search)
   const urlLat = params.get('lat') ? parseFloat(params.get('lat')!) : null
@@ -140,8 +153,8 @@ export default function App() {
   }
 
   function confirmManual() {
-    const lat = parseFloat(manualLat)
-    const lon = parseFloat(manualLon)
+    const lat = parseCoord(manualLat)
+    const lon = parseCoord(manualLon)
     if (isNaN(lat) || lat < -90 || lat > 90) {
       setManualError('LAT must be between -90 and 90')
       return
